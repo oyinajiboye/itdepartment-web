@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>B2B Quote Calculator &amp; Board Proposal Generator — IT Department Nigeria</title>
+  <meta name="description" content="Calculate your monthly IT Department retainer, compare savings vs in-house IT, and download a printable Executive Board Proposal PDF." />
+  <link rel="icon" type="image/svg+xml" href="logo-icon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div class="top-bar no-print">
+    <span>Need to present this to your CEO, MD, or Board? Configure below and click "Print / Save Board Proposal PDF".</span>
+    <a href="index.html">&larr; Back to Homepage</a>
+  </div>
+
+  <!-- Navbar -->
+  <header class="site-header no-print">
+    <div class="container nav-inner">
+      <a href="index.html" class="brand-logo" aria-label="IT Department Home">
+        <img src="logo-full-light.svg" alt="IT Department" class="brand-full-logo" />
+      </a>
+
+      <nav class="nav-links">
+        <a href="index.html#services">What We Do</a>
+        <a href="index.html#leaders">For CEOs, HR &amp; Admin</a>
+        <a href="index.html#pricing">Pricing</a>
+        <a href="calculator.html" class="active">Quote Calculator</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="index.html#contact" class="btn btn-white btn-sm">Book 7-Day Pilot &rarr;</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Calculator Section -->
+  <section class="section-offwhite">
+    <div class="container">
+      <div class="section-head">
+        <span class="eyebrow">Instant B2B Retainer &amp; Proposal Calculator</span>
+        <h1 class="section-title">Calculate your organisation’s monthly retainer &amp; savings.</h1>
+        <p class="section-desc">
+          Select the number of staff computers and services required. Download a clean Board Proposal PDF or lock in your 7-day free office pilot.
+        </p>
+      </div>
+
+      <div class="calc-page-grid">
+
+        <!-- Left: Configuration Controls -->
+        <div class="calc-panel">
+          <div class="field">
+            <label for="calcCompanyInput">Organisation Name (for Printable Proposal)</label>
+            <input type="text" id="calcCompanyInput" placeholder="e.g. Zenith Logistics Nigeria Ltd" />
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 24px;">
+            <label for="pcSlider" style="font-weight: 500;">Number of Staff Computers / Laptops</label>
+            <span id="pcCountLabel" style="font-family: var(--font-mono); font-weight: 600; background: var(--green); color: var(--white); padding: 4px 12px;">20 PCs</span>
+          </div>
+
+          <div class="quick-pc-btns">
+            <button type="button" class="quick-pc-btn" data-pcs="10">10 PCs</button>
+            <button type="button" class="quick-pc-btn active" data-pcs="20">20 PCs</button>
+            <button type="button" class="quick-pc-btn" data-pcs="35">35 PCs</button>
+            <button type="button" class="quick-pc-btn" data-pcs="50">50 PCs</button>
+            <button type="button" class="quick-pc-btn" data-pcs="80">80 PCs</button>
+          </div>
+
+          <input type="range" id="pcSlider" class="tu-slider" min="5" max="120" step="5" value="20" />
+
+          <div style="margin-top: 12px;">
+            <div style="font-weight: 500; margin-bottom: 12px;">Included Services</div>
+
+            <label class="scope-check-item">
+              <span>
+                <input type="checkbox" checked disabled />
+                <strong>Windows AI Fix Assistant (30 Offline/Online Fixes) + Remote IT</strong>
+              </span>
+              <span style="font-family: var(--font-mono); font-size: 0.75rem;">CORE</span>
+            </label>
+
+            <label class="scope-check-item">
+              <span>
+                <input type="checkbox" id="chkWeb" checked />
+                <span>Corporate Website Creation, Hosting, SSL &amp; Monthly Updates</span>
+              </span>
+              <span id="tagWeb" style="font-family: var(--font-mono); font-size: 0.75rem;">INCLUDED</span>
+            </label>
+
+            <label class="scope-check-item">
+              <span>
+                <input type="checkbox" id="chkOnsite" checked />
+                <span>Physical On-Site Engineer Visits (Network, Wi-Fi &amp; Printers)</span>
+              </span>
+              <span id="tagOnsite" style="font-family: var(--font-mono); font-size: 0.75rem;">INCLUDED</span>
+            </label>
+
+            <label class="scope-check-item">
+              <span>
+                <input type="checkbox" checked disabled />
+                <span>HR Staff Onboarding, Exit Lockouts &amp; Official `@company` Emails</span>
+              </span>
+              <span style="font-family: var(--font-mono); font-size: 0.75rem;">INCLUDED</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Right: Live Quote Output & Printable Proposal Box -->
+        <aside class="quote-summary-panel" id="printableProposalArea">
+          <img src="logo-full-light.svg" alt="IT Department" style="height: 34px; width: auto; margin-bottom: 16px;" />
+          <div style="font-family: var(--font-mono); font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.8;">
+            OFFICIAL SLA ESTIMATE // ITDEPARTMENT.NG
+          </div>
+          <div id="propCompanyHeader" style="font-size: 1.05rem; margin-top: 6px; opacity: 0.9;">
+            Prepared for: Executive Management, HR &amp; Operations
+          </div>
+
+          <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border-light);">
+            <span id="recommendedTierName" style="font-family: var(--font-mono); font-size: 0.8rem;">RECOMMENDED: GROWTH DEPARTMENT SLA</span>
+            <div class="quote-big-number" id="monthlyQuoteValue">&#8358;300,000<span style="font-size: 1rem; font-weight: 300;"> / month</span></div>
+            <div id="slaResponseBadge" style="font-size: 0.88rem; opacity: 0.85;">
+              Covers 20 Staff PCs &bull; &lt; 15 Min Remote SLA &bull; On-Site Visits &bull; Website Care
+            </div>
+          </div>
+
+          <div style="margin: 24px 0; padding: 18px; border: 1px solid var(--border-light); background: rgba(0,0,0,0.2);">
+            <div style="font-size: 0.82rem; opacity: 0.8;">Estimated Annual Savings vs. In-House IT + Web Agency:</div>
+            <div id="annualSavingsValue" style="font-family: var(--font-mono); font-size: 1.45rem; font-weight: 500; margin-top: 4px;">
+              &#8358;3,240,000 / year saved
+            </div>
+          </div>
+
+          <ul class="price-list" style="margin-bottom: 28px; opacity: 0.92;">
+            <li>Windows AI Fix Assistant on all staff computers (works online &amp; offline)</li>
+            <li>Dedicated Remote Engineers (&lt; 15 min response) + Physical Office Visits</li>
+            <li>Corporate Website Creation/Redesign, Hosting, SSL &amp; Unlimited Updates</li>
+            <li>Same-Day HR New-Hire Setup &amp; 15-Minute Exit Security Lockout</li>
+          </ul>
+
+          <div class="no-print" style="display: flex; flex-direction: column; gap: 12px;">
+            <button type="button" class="btn btn-white btn-block" id="printQuoteBtn">
+              Print / Save Board Proposal PDF
+            </button>
+            <a href="index.html#contact" class="btn btn-outline-white btn-block">
+              Book Free 7-Day Office Pilot &rarr;
+            </a>
+          </div>
+        </aside>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer no-print">
+    <div class="container">
+      <div class="footer-bottom" style="padding-top: 0;">
+        <span>&copy; 2026 IT Department Nigeria (itdepartment.ng)</span>
+        <a href="index.html" style="color: var(--white); text-decoration: underline;">&larr; Return to Homepage</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
