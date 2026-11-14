@@ -201,7 +201,7 @@
     }
 
     function updateCalculator() {
-      const pcs = parseInt(pcSlider.value, 10) || 20;
+      const pcs = parseInt(pcSlider.value, 10) || 10;
       const includeWeb = chkWeb ? chkWeb.checked : true;
       const includeOnsite = chkOnsite ? chkOnsite.checked : true;
 
@@ -213,38 +213,47 @@
       if (tagWeb) tagWeb.textContent = includeWeb ? 'INCLUDED' : 'EXCLUDED';
       if (tagOnsite) tagOnsite.textContent = includeOnsite ? 'INCLUDED' : 'REMOTE ONLY';
 
-      let monthly = 150000;
-      let tier = 'RECOMMENDED: STARTER OFFICE SLA';
+      let monthly = 350000;
+      let tier = 'RECOMMENDED: STARTER OFFICE SLA (2–10 PCs)';
+      let isEnterpriseCustom = false;
 
-      if (pcs <= 15) {
-        monthly = 150000;
-        tier = 'RECOMMENDED: STARTER OFFICE SLA';
-      } else if (pcs <= 40) {
-        monthly = 300000 + Math.max(0, pcs - 25) * 6500;
-        tier = 'RECOMMENDED: GROWTH DEPARTMENT SLA';
+      if (pcs <= 10) {
+        monthly = 350000;
+        tier = 'RECOMMENDED: STARTER OFFICE SLA (2–10 PCs)';
+      } else if (pcs <= 20) {
+        monthly = 600000;
+        tier = 'RECOMMENDED: GROWTH DEPARTMENT SLA (10–20 PCs)';
       } else {
-        monthly = 550000 + Math.max(0, pcs - 50) * 8000;
-        tier = 'RECOMMENDED: ENTERPRISE MANAGED SLA';
+        isEnterpriseCustom = true;
+        monthly = 600000 + (pcs - 20) * 18000;
+        tier = 'RECOMMENDED: ENTERPRISE MANAGED SLA (21+ PCs)';
       }
 
-      if (!includeWeb) monthly -= 25000;
-      if (!includeOnsite) monthly -= 30000;
-      monthly = Math.max(120000, monthly);
+      if (!includeWeb) monthly -= 35000;
+      if (!includeOnsite) monthly -= 40000;
+      monthly = Math.max(280000, monthly);
 
       const inHouseEquivalent =
-        pcs <= 15 ? 420000 : pcs <= 40 ? 570000 + (pcs - 20) * 8500 : 950000 + (pcs - 50) * 10000;
-      const annualSavings = Math.max(1200000, (inHouseEquivalent - monthly) * 12);
+        pcs <= 10 ? 650000 : pcs <= 20 ? 1100000 : 1400000 + (pcs - 20) * 25000;
+      const annualSavings = Math.max(2400000, (inHouseEquivalent - monthly) * 12);
 
       if (recommendedTierName) recommendedTierName.textContent = tier;
       if (monthlyQuoteValue) {
-        monthlyQuoteValue.innerHTML =
-          formatNaira(monthly) + '<span style="font-size: 1rem; font-weight: 300;"> / month</span>';
+        if (isEnterpriseCustom) {
+          monthlyQuoteValue.innerHTML =
+            'Talk to Us <span style="font-size: 1rem; font-weight: 300;">(Est. ' +
+            formatNaira(monthly) +
+            '/mo)</span>';
+        } else {
+          monthlyQuoteValue.innerHTML =
+            formatNaira(monthly) + '<span style="font-size: 1rem; font-weight: 300;"> / month</span>';
+        }
       }
       if (slaResponseBadge) {
         slaResponseBadge.textContent =
           `Covers ${pcs} Staff PCs • < 15 Min Remote SLA • ` +
           (includeOnsite ? 'On-Site Engineer Visits • ' : 'Remote Support • ') +
-          (includeWeb ? 'Corporate Website Care' : 'Core IT Care');
+          (includeWeb ? '10 Web Updates/mo + Quarterly Cybersecurity Check' : 'Core IT Care');
       }
       if (annualSavingsValue) {
         annualSavingsValue.textContent = formatNaira(annualSavings) + ' / year saved';
