@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>B2B Quote Calculator &amp; Board Proposal Generator — IT Department Nigeria</title>
-  <meta name="description" content="Calculate your monthly IT Department retainer, compare savings vs in-house IT, and download a printable Executive Board Proposal PDF." />
+  <title>Price Calculator &amp; Printable Quote — IT Department Nigeria</title>
+  <meta name="description" content="See your monthly price for IT Department, compare it with hiring in-house, and print a quote to share with your management." />
   <link rel="icon" type="image/svg+xml" href="logo-icon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -15,7 +15,7 @@
 
   <!-- Top Bar -->
   <div class="top-bar no-print">
-    <span>Need to present this to your CEO, MD, or Board? Configure below and click "Print / Save Board Proposal PDF".</span>
+    <span>Need to show this to your CEO, MD or board? Fill it in below, then click "Print / Save as PDF".</span>
     <a href="index.html">&larr; Back to Homepage</a>
   </div>
 
@@ -30,11 +30,11 @@
         <a href="index.html#services">What We Do</a>
         <a href="index.html#leaders">For CEOs, HR &amp; Admin</a>
         <a href="index.html#pricing">Pricing</a>
-        <a href="calculator.html" class="active">Quote Calculator</a>
+        <a href="calculator.html" class="active">Price Calculator</a>
       </nav>
 
       <div class="nav-actions">
-        <a href="index.html#contact" class="btn btn-white btn-sm">Book 7-Day Pilot &rarr;</a>
+        <a href="index.html#contact" class="btn btn-white btn-sm">Free 7-Day Trial &rarr;</a>
       </div>
     </div>
   </header>
@@ -43,10 +43,11 @@
   <section class="section-offwhite">
     <div class="container">
       <div class="section-head">
-        <span class="eyebrow">Instant B2B Retainer &amp; Proposal Calculator</span>
-        <h1 class="section-title">Calculate your organisation’s monthly retainer &amp; savings.</h1>
+        <span class="eyebrow">Price Calculator</span>
+        <h1 class="section-title">What will it cost your office each month?</h1>
         <p class="section-desc">
-          Select the number of staff computers and services required. Download a clean Board Proposal PDF or lock in your 7-day free office pilot.
+          Tell us how many computers your staff use. You'll see your monthly price straight away, and you can print it
+          as a quote to share.
         </p>
       </div>
 
@@ -55,40 +56,40 @@
         <!-- Left: Configuration Controls -->
         <div class="calc-panel">
           <div class="field">
-            <label for="calcCompanyInput">Organisation Name (for Printable Proposal)</label>
+            <label for="calcCompanyInput">Your Company Name (shown on the printed quote)</label>
             <input type="text" id="calcCompanyInput" placeholder="e.g. Zenith Logistics Nigeria Ltd" />
           </div>
 
           <div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 24px;">
-            <label for="pcSlider" style="font-weight: 500;">Number of Staff Computers / Laptops</label>
-            <span id="pcCountLabel" style="font-family: var(--font-mono); font-weight: 600; background: var(--green); color: var(--white); padding: 4px 12px;">10 PCs</span>
+            <label for="pcSlider" style="font-weight: 500;">How many computers / laptops do your staff use?</label>
+            <span id="pcCountLabel" style="font-family: var(--font-mono); font-weight: 600; background: var(--green); color: var(--white); padding: 4px 12px;">10 computers</span>
           </div>
 
           <div class="quick-pc-btns">
-            <button type="button" class="quick-pc-btn" data-pcs="5">5 PCs</button>
-            <button type="button" class="quick-pc-btn active" data-pcs="10">10 PCs</button>
-            <button type="button" class="quick-pc-btn" data-pcs="15">15 PCs</button>
-            <button type="button" class="quick-pc-btn" data-pcs="20">20 PCs</button>
-            <button type="button" class="quick-pc-btn" data-pcs="35">35+ PCs</button>
+            <button type="button" class="quick-pc-btn" data-pcs="5">5</button>
+            <button type="button" class="quick-pc-btn active" data-pcs="10">10</button>
+            <button type="button" class="quick-pc-btn" data-pcs="15">15</button>
+            <button type="button" class="quick-pc-btn" data-pcs="20">20</button>
+            <button type="button" class="quick-pc-btn" data-pcs="35">35+</button>
           </div>
 
-          <input type="range" id="pcSlider" class="tu-slider" min="2" max="60" step="1" value="10" />
+          <input type="range" id="pcSlider" class="tu-slider" min="1" max="60" step="1" value="10" />
 
           <div style="margin-top: 12px;">
-            <div style="font-weight: 500; margin-bottom: 12px;">Included Services</div>
+            <div style="font-weight: 500; margin-bottom: 12px;">What's Included</div>
 
             <label class="scope-check-item">
               <span>
                 <input type="checkbox" checked disabled />
-                <strong>Windows AI Fix Assistant (30 Offline/Online Fixes) + Remote IT</strong>
+                <strong>Help app on every computer + unlimited help from our support team</strong>
               </span>
-              <span style="font-family: var(--font-mono); font-size: 0.75rem;">CORE</span>
+              <span style="font-family: var(--font-mono); font-size: 0.75rem;">ALWAYS</span>
             </label>
 
             <label class="scope-check-item">
               <span>
                 <input type="checkbox" id="chkWeb" checked />
-                <span>Corporate Website Care (10 Monthly Updates, Hosting, SSL &amp; Quarterly Cybersecurity Check)</span>
+                <span>Website care (up to 10 changes a month, kept online and safe, safety check every 3 months)</span>
               </span>
               <span id="tagWeb" style="font-family: var(--font-mono); font-size: 0.75rem;">INCLUDED</span>
             </label>
@@ -96,7 +97,7 @@
             <label class="scope-check-item">
               <span>
                 <input type="checkbox" id="chkOnsite" checked />
-                <span>Physical On-Site Engineer Visits (Network, Wi-Fi &amp; Printers)</span>
+                <span>Office visits by our engineers (Wi-Fi, internet and printers)</span>
               </span>
               <span id="tagOnsite" style="font-family: var(--font-mono); font-size: 0.75rem;">INCLUDED</span>
             </label>
@@ -104,9 +105,9 @@
             <label class="scope-check-item">
               <span>
                 <input type="checkbox" checked disabled />
-                <span>HR Staff Onboarding, Exit Lockouts &amp; Official `@company` Emails</span>
+                <span>New staff setup, removing access when staff leave, and work emails</span>
               </span>
-              <span style="font-family: var(--font-mono); font-size: 0.75rem;">INCLUDED</span>
+              <span style="font-family: var(--font-mono); font-size: 0.75rem;">ALWAYS</span>
             </label>
           </div>
         </div>
@@ -115,40 +116,44 @@
         <aside class="quote-summary-panel" id="printableProposalArea">
           <img src="logo-full-light.svg" alt="IT Department" style="height: 34px; width: auto; margin-bottom: 16px;" />
           <div style="font-family: var(--font-mono); font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.8;">
-            OFFICIAL SLA ESTIMATE // ITDEPARTMENT.NG
+            PRICE QUOTE // ITDEPARTMENT.NG
           </div>
           <div id="propCompanyHeader" style="font-size: 1.05rem; margin-top: 6px; opacity: 0.9;">
-            Prepared for: Executive Management, HR &amp; Operations
+            Prepared for: Management, HR &amp; Operations
           </div>
 
           <div style="margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border-light);">
-            <span id="recommendedTierName" style="font-family: var(--font-mono); font-size: 0.8rem;">RECOMMENDED: STARTER OFFICE SLA (2–10 PCs)</span>
+            <span id="recommendedTierName" style="font-family: var(--font-mono); font-size: 0.8rem;">YOUR PLAN: SMALL OFFICE (UP TO 10 COMPUTERS)</span>
             <div class="quote-big-number" id="monthlyQuoteValue">&#8358;350,000<span style="font-size: 1rem; font-weight: 300;"> / month</span></div>
             <div id="slaResponseBadge" style="font-size: 0.88rem; opacity: 0.85;">
-              Covers 10 Staff PCs &bull; &lt; 10 Min Remote SLA &bull; 10 Website Updates/mo &bull; Quarterly Cybersecurity Check
+              Covers 10 computers &bull; Help within 15 minutes &bull; Office visits &bull; Website care
             </div>
           </div>
 
           <div style="margin: 24px 0; padding: 18px; border: 1px solid var(--border-light); background: rgba(0,0,0,0.2);">
-            <div style="font-size: 0.82rem; opacity: 0.8;">Estimated Annual Savings vs. In-House IT + Web Agency:</div>
-            <div id="annualSavingsValue" style="font-family: var(--font-mono); font-size: 1.45rem; font-weight: 500; margin-top: 4px;">
-              &#8358;3,240,000 / year saved
+            <div style="font-size: 0.82rem; opacity: 0.8;">For comparison, hiring one IT support officer in Lagos:</div>
+            <div id="annualSavingsValue" style="font-family: var(--font-mono); font-size: 1.25rem; font-weight: 500; margin-top: 4px;">
+              &#8358;200,000 – &#8358;400,000 / month
+            </div>
+            <div style="font-size: 0.78rem; opacity: 0.75; margin-top: 6px;">
+              Salary only, before pension, health insurance and leave cover. Typical market range for a mid-level
+              hire. Does not include a web designer.
             </div>
           </div>
 
           <ul class="price-list" style="margin-bottom: 28px; opacity: 0.92;">
-            <li>Windows AI Fix Assistant on all staff computers (works online &amp; offline)</li>
-            <li>Dedicated Remote Engineers (&lt; 15 min response) + Physical Office Visits</li>
-            <li>Corporate Website Care (10 Monthly Updates, Hosting, SSL &amp; Quarterly Cybersecurity Check)</li>
-            <li>Same-Day HR New-Hire Setup &amp; 15-Minute Exit Security Lockout</li>
+            <li>Help app on every staff computer (works with or without internet)</li>
+            <li>Our support team starts helping within 15 minutes, plus office visits</li>
+            <li>Website care: up to 10 changes a month, kept online and safe</li>
+            <li>New staff ready on day one; leavers' access removed within 15 minutes</li>
           </ul>
 
           <div class="no-print" style="display: flex; flex-direction: column; gap: 12px;">
             <button type="button" class="btn btn-white btn-block" id="printQuoteBtn">
-              Print / Save Board Proposal PDF
+              Print / Save as PDF
             </button>
             <a href="index.html#contact" class="btn btn-outline-white btn-block">
-              Book Free 7-Day Office Pilot &rarr;
+              Book Your Free 7-Day Trial &rarr;
             </a>
           </div>
         </aside>

@@ -5,5 +5,8 @@ node_modules/
 crm-nextjs/
 windows-app/
 docs/
+lead-finder/
+marketing/
 *.db
 *.sqlite
+

@@ -127,53 +127,81 @@
 
       if (pilotSubmitBtn) {
         pilotSubmitBtn.disabled = true;
-        pilotSubmitBtn.textContent = 'Submitting Pilot Request...';
+        pilotSubmitBtn.textContent = 'Sending...';
       }
 
-      try {
-        const requests = [];
+      const requests = [];
 
-        // 1. Send directly to Google Sheets Web App if configured on the form
-        if (sheetUrl) {
-          requests.push(
-            fetch(sheetUrl, {
-              method: 'POST',
-              mode: 'no-cors',
-              headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-              body: JSON.stringify(payload),
-            })
-          );
-        }
+      // 1. Google Sheet (Apps Script). no-cors means we can't read the reply,
+      //    but a resolved fetch means the request reached Google.
+      if (sheetUrl) {
+        requests.push(
+          fetch(sheetUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(payload),
+          }).then(() => 'sheet')
+        );
+      }
 
-        // 2. Also send to the Next.js CRM Pilot Leads API (which forwards to GOOGLE_SHEET_WEBHOOK_URL)
-        if (crmPilotUrl) {
-          requests.push(
-            fetch(crmPilotUrl, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(payload),
-            })
-          );
-        }
+      // 2. CRM Pilot Leads API: only counts as success on a 2xx response.
+      if (crmPilotUrl) {
+        requests.push(
+          fetch(crmPilotUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          }).then((res) => {
+            if (!res.ok) throw new Error('CRM returned ' + res.status);
+            return 'crm';
+          })
+        );
+      }
 
-        await Promise.allSettled(requests);
-      } catch (_) {
-        // Non-blocking: always show confirmation to executive prospect
-      } finally {
-        if (pilotSubmitBtn) {
-          pilotSubmitBtn.disabled = false;
-          pilotSubmitBtn.innerHTML = 'Request 7-Day Free Pilot &rarr;';
-        }
+      const results = await Promise.allSettled(requests);
+      const delivered = results.some((r) => r.status === 'fulfilled');
+
+      if (pilotSubmitBtn) {
+        pilotSubmitBtn.disabled = false;
+        pilotSubmitBtn.innerHTML = 'Book My Free Trial &rarr;';
       }
 
       if (pilotSuccessMsg) {
         pilotSuccessMsg.style.display = 'block';
-        pilotSuccessMsg.innerHTML =
-          `<strong>Pilot Request Logged for ${company} (${name}):</strong> ` +
-          `Your details have been recorded for your 7-day office pilot (${pcs} PCs). Our Lead Engineer will reach out within 2 business hours. ` +
-          `Need a Board PDF now? <a href="calculator.html" style="text-decoration:underline;font-weight:600;">Open Quote Calculator &rarr;</a>`;
+        pilotSuccessMsg.textContent = '';
+        const strong = document.createElement('strong');
+        if (delivered) {
+          pilotSuccessMsg.style.borderLeftColor = 'var(--green)';
+          strong.textContent = `Thank you, ${name}. `;
+          pilotSuccessMsg.append(
+            strong,
+            `We've received your free trial request for ${company}. We'll contact you within 2 business hours.`
+          );
+        } else {
+          pilotSuccessMsg.style.borderLeftColor = '#b42318';
+          strong.textContent = "Sorry, we couldn't send your request. ";
+          const mail = document.createElement('a');
+          mail.href =
+            'mailto:hello@itdepartment.ng?subject=' +
+            encodeURIComponent('Free trial request: ' + company) +
+            '&body=' +
+            encodeURIComponent(
+              `Name: ${name}\nRole: ${role}\nCompany: ${company}\nContact: ${contact}\nComputers: ${pcs}`
+            );
+          mail.textContent = 'hello@itdepartment.ng';
+          mail.style.textDecoration = 'underline';
+          pilotSuccessMsg.append(
+            strong,
+            'Please check your internet connection and try again, or email us at ',
+            mail,
+            '.'
+          );
+        }
       }
-      pilotForm.reset();
+
+      // Only clear the form when the request actually went through
+      if (delivered) pilotForm.reset();
     });
   }
 
@@ -193,7 +221,6 @@
     const recommendedTierName = document.getElementById('recommendedTierName');
     const monthlyQuoteValue = document.getElementById('monthlyQuoteValue');
     const slaResponseBadge = document.getElementById('slaResponseBadge');
-    const annualSavingsValue = document.getElementById('annualSavingsValue');
     const printQuoteBtn = document.getElementById('printQuoteBtn');
 
     function formatNaira(n) {
@@ -205,45 +232,38 @@
       const includeWeb = chkWeb ? chkWeb.checked : true;
       const includeOnsite = chkOnsite ? chkOnsite.checked : true;
 
-      if (pcCountLabel) pcCountLabel.textContent = pcs + ' PCs';
+      if (pcCountLabel) pcCountLabel.textContent = pcs + (pcs === 1 ? ' computer' : ' computers');
       quickPcBtns.forEach((btn) => {
         btn.classList.toggle('active', parseInt(btn.getAttribute('data-pcs'), 10) === pcs);
       });
 
-      if (tagWeb) tagWeb.textContent = includeWeb ? 'INCLUDED' : 'EXCLUDED';
-      if (tagOnsite) tagOnsite.textContent = includeOnsite ? 'INCLUDED' : 'REMOTE ONLY';
+      if (tagWeb) tagWeb.textContent = includeWeb ? 'INCLUDED' : 'NOT INCLUDED';
+      if (tagOnsite) tagOnsite.textContent = includeOnsite ? 'INCLUDED' : 'ONLINE HELP ONLY';
 
       let monthly = 350000;
-      let tier = 'RECOMMENDED: STARTER OFFICE SLA (2–10 PCs)';
-      let isEnterpriseCustom = false;
+      let tier = 'YOUR PLAN: SMALL OFFICE (UP TO 10 COMPUTERS)';
+      let isCustom = false;
 
       if (pcs <= 10) {
         monthly = 350000;
-        tier = 'RECOMMENDED: STARTER OFFICE SLA (2–10 PCs)';
+        tier = 'YOUR PLAN: SMALL OFFICE (UP TO 10 COMPUTERS)';
       } else if (pcs <= 20) {
         monthly = 600000;
-        tier = 'RECOMMENDED: GROWTH DEPARTMENT SLA (10–20 PCs)';
+        tier = 'YOUR PLAN: GROWING OFFICE (11–20 COMPUTERS)';
       } else {
-        isEnterpriseCustom = true;
-        monthly = 600000 + (pcs - 20) * 18000;
-        tier = 'RECOMMENDED: ENTERPRISE MANAGED SLA (21+ PCs)';
+        isCustom = true;
+        tier = 'YOUR PLAN: LARGE OR MULTI-BRANCH (21+ COMPUTERS)';
       }
 
       if (!includeWeb) monthly -= 35000;
       if (!includeOnsite) monthly -= 40000;
       monthly = Math.max(280000, monthly);
 
-      const inHouseEquivalent =
-        pcs <= 10 ? 650000 : pcs <= 20 ? 1100000 : 1400000 + (pcs - 20) * 25000;
-      const annualSavings = Math.max(2400000, (inHouseEquivalent - monthly) * 12);
-
       if (recommendedTierName) recommendedTierName.textContent = tier;
       if (monthlyQuoteValue) {
-        if (isEnterpriseCustom) {
+        if (isCustom) {
           monthlyQuoteValue.innerHTML =
-            'Talk to Us <span style="font-size: 1rem; font-weight: 300;">(Est. ' +
-            formatNaira(monthly) +
-            '/mo)</span>';
+            "Let's Talk <span style=\"font-size: 1rem; font-weight: 300;\">(custom quote)</span>";
         } else {
           monthlyQuoteValue.innerHTML =
             formatNaira(monthly) + '<span style="font-size: 1rem; font-weight: 300;"> / month</span>';
@@ -251,18 +271,15 @@
       }
       if (slaResponseBadge) {
         slaResponseBadge.textContent =
-          `Covers ${pcs} Staff PCs • < 15 Min Remote SLA • ` +
-          (includeOnsite ? 'On-Site Engineer Visits • ' : 'Remote Support • ') +
-          (includeWeb ? '10 Web Updates/mo + Quarterly Cybersecurity Check' : 'Core IT Care');
-      }
-      if (annualSavingsValue) {
-        annualSavingsValue.textContent = formatNaira(annualSavings) + ' / year saved';
+          `Covers ${pcs} ${pcs === 1 ? 'computer' : 'computers'} • Help within 15 minutes • ` +
+          (includeOnsite ? 'Office visits • ' : 'Online help only • ') +
+          (includeWeb ? 'Website care' : 'No website care');
       }
       if (propCompanyHeader && calcCompanyInput) {
         const comp = calcCompanyInput.value.trim();
         propCompanyHeader.textContent = comp
           ? 'Prepared for: ' + comp
-          : 'Prepared for: Executive Management, HR & Operations';
+          : 'Prepared for: Management, HR & Operations';
       }
     }
 
